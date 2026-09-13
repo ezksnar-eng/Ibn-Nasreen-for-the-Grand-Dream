@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ابن نسرين للحلم الدسيم</title>
-<script src="https://js.puter.com/v2/"></script>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -220,7 +219,10 @@
 <header>
   <button class="icon-btn" id="menu-btn"><i class="fa-solid fa-bars"></i></button>
   <div class="brand"><div class="seal"></div><strong>ابن نسرين للحلم الدسيم</strong></div>
-  <button class="icon-btn" id="profile-btn"><i class="fa-solid fa-user"></i></button>
+  <div style="display:flex; gap:8px;">
+    <button class="icon-btn" id="settings-btn"><i class="fa-solid fa-gear"></i></button>
+    <button class="icon-btn" id="profile-btn"><i class="fa-solid fa-user"></i></button>
+  </div>
 </header>
 
 <div class="overlay" id="overlay"></div>
@@ -257,6 +259,23 @@
     </select>
     <div class="checkline"><input type="checkbox" id="p-hide"><label for="p-hide">إخفاء اسمي بالقائمة (عرضه كـ "زائر")</label></div>
     <button class="save-btn" id="profile-save">حفظ</button>
+  </div>
+</div>
+
+<div class="profile-modal" id="settings-modal">
+  <div class="profile-box">
+    <h3>إعدادات الذكاء الاصطناعي <button class="close-btn" id="settings-close"><i class="fa-solid fa-xmark"></i></button></h3>
+    <p style="font-size:.82rem; color:var(--muted); line-height:1.9; margin-top:8px;">
+      الموقع يستخدم مفتاح Gemini المجاني من گوگل (بدون فيزا وبدون تسجيل دخول متكرر). تحتاج تسويها مرة وحدة بس:
+    </p>
+    <ol style="font-size:.82rem; color:var(--muted); line-height:2; padding-inline-start:18px; margin-top:6px;">
+      <li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> بحسابك گوگل</li>
+      <li>اضغط "Create API key" وانسخه</li>
+      <li>الصگه بالحقل تحت واحفظ</li>
+    </ol>
+    <label>مفتاح Gemini API</label>
+    <input type="password" id="gemini-key" placeholder="الصگ المفتاح هنا">
+    <button class="save-btn" id="settings-save">حفظ المفتاح</button>
   </div>
 </div>
 
@@ -452,13 +471,47 @@
     });
   });
 
-  // ---------- AI عبر Puter.js (مجاني بدون مفتاح API) ----------
+  // ---------- إعدادات مفتاح Gemini ----------
+  const settingsModal = document.getElementById('settings-modal');
+  document.getElementById('settings-btn').addEventListener('click', ()=>{
+    document.getElementById('gemini-key').value = localStorage.getItem('gemini-api-key') || '';
+    settingsModal.classList.add('show');
+  });
+  document.getElementById('settings-close').addEventListener('click', ()=> settingsModal.classList.remove('show'));
+  document.getElementById('settings-save').addEventListener('click', ()=>{
+    const k = document.getElementById('gemini-key').value.trim();
+    if(k) localStorage.setItem('gemini-api-key', k);
+    settingsModal.classList.remove('show');
+  });
+
+  // ---------- AI عبر Gemini API (مفتاح مجاني من گوگل، بدون تسجيل دخول متكرر) ----------
   async function askAI(messages){
-    const response = await puter.ai.chat(messages);
-    if (typeof response === 'string') return response;
-    if (response?.message?.content) return response.message.content;
-    if (Array.isArray(response?.content)) return response.content.map(c=>c.text||'').join('\n');
-    return JSON.stringify(response);
+    const apiKey = localStorage.getItem('gemini-api-key');
+    if(!apiKey){
+      document.getElementById('settings-btn').click();
+      throw new Error('NO_KEY');
+    }
+    const systemMsg = messages.find(m=>m.role==='system');
+    const chatMsgs = messages.filter(m=>m.role!=='system');
+    const contents = chatMsgs.map(m=>({
+      role: m.role==='assistant' ? 'model' : 'user',
+      parts: [{text: m.content}]
+    }));
+    const body = {
+      contents,
+      systemInstruction: systemMsg ? {parts:[{text: systemMsg.content}]} : undefined
+    };
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const errText = await res.text();
+      throw new Error('API_ERROR: ' + errText.slice(0,200));
+    }
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('\n') || 'ما وصل جواب، جرب مرة ثانية.';
   }
 
   const FATWA_PROMPT = `أنت مساعد يجيب حصراً وفق الأحكام الفقهية الشيعية الإمامية الاثني عشرية (مثل فتاوى المراجع كالسيد السيستاني أو نظائره)، ولا تذكر آراء مذاهب أخرى إلا للمقارنة إذا طُلب ذلك صراحة.
@@ -549,7 +602,7 @@
         status.textContent = 'تم ✓';
       }catch(err){
         console.error(err);
-        status.textContent = 'صار خطأ بالاتصال، جرب مرة ثانية.';
+        status.textContent = err.message==='NO_KEY' ? 'حط مفتاح Gemini أول من ⚙️ بالأعلى.' : 'صار خطأ بالاتصال، جرب مرة ثانية.';
         status.style.color = 'var(--danger)';
         conversation.pop();
       }finally{
