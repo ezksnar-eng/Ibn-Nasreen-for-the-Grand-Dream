@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ابن نسرين للحلم الدسيم</title>
+<script src="https://js.puter.com/v2/"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --primary:#6d4bb8;
+    --primary-dark:#4b2e83;
+    --primary-light:#8a6fd8;
+    --sky:#3fb6e0;
+    --sky-light:#bfeaf7;
+    --bg:#f6f4fb;
+    --card:#ffffff;
+    --ink:#241b3a;
+    --muted:#6b6483;
+    --border:#e4ddf5;
+    --danger:#a8395a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Tajawal',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+
+  /* ===== الهيدر ===== */
+  header{
+    position:sticky; top:0; z-index:900;
+    background:linear-gradient(90deg,var(--primary-dark),var(--primary));
+    color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px;
+    box-shadow:0 4px 16px rgba(75,46,131,.25);
+  }
+  header .icon-btn{
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,.14);
+    border:none; color:#fff; font-size:1.05rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  header .brand{display:flex; align-items:center; gap:10px;}
+  header .brand .seal{
+    width:34px; height:34px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff, var(--sky-light) 60%, var(--sky));
+    flex:none;
+  }
+  header .brand strong{font-size:.98rem; font-weight:800;}
+
+  /* ===== الدرج الجانبي ===== */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,10,40,.45);
+    display:none; z-index:1000;
+  }
+  .overlay.show{display:block;}
+  .drawer{
+    position:fixed; top:0; right:-320px; width:290px; height:100%;
+    background:#fff; z-index:1001; transition:right .3s ease;
+    padding:22px 18px; overflow-y:auto;
+  }
+  .drawer.show{right:0;}
+  .drawer .close-btn{
+    background:none; border:none; font-size:1.3rem; color:var(--muted); cursor:pointer;
+  }
+  .drawer .d-brand{text-align:center; margin:10px 0 18px;}
+  .drawer .d-brand .seal{
+    width:60px; height:60px; border-radius:50%; margin:0 auto 8px;
+    background:radial-gradient(circle at 35% 30%, #fff, var(--sky-light) 60%, var(--sky));
+  }
+  .drawer .d-brand strong{font-size:1rem; font-weight:800; color:var(--primary-dark);}
+  .drawer hr{border:none; border-top:1px solid var(--border); margin:14px 0;}
+  .drawer .d-item{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 4px; cursor:pointer; color:var(--ink); font-weight:700; font-size:.94rem;
+  }
+  .drawer .d-item i{
+    width:34px; height:34px; border-radius:50%; background:var(--primary);
+    color:#fff; display:flex; align-items:center; justify-content:center; font-size:.85rem; flex:none;
+  }
+  .drawer .d-footer{margin-top:20px; font-size:.78rem; color:var(--muted); line-height:1.8;}
+
+  /* ===== البروفايل ===== */
+  .profile-modal{
+    position:fixed; inset:0; background:rgba(20,10,40,.45);
+    display:none; align-items:flex-start; justify-content:center; z-index:1100; padding:40px 16px;
+  }
+  .profile-modal.show{display:flex;}
+  .profile-box{
+    background:#fff; border-radius:16px; padding:24px; width:100%; max-width:420px;
+    max-height:85vh; overflow-y:auto;
+  }
+  .profile-box h3{color:var(--primary-dark); margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;}
+  .profile-box label{display:block; font-size:.82rem; color:var(--muted); margin:12px 0 5px; font-weight:700;}
+  .profile-box input, .profile-box select{
+    width:100%; border:1.5px solid var(--border); border-radius:8px; padding:10px 12px;
+    font-family:inherit; font-size:.92rem; background:var(--bg);
+  }
+  .profile-box .save-btn{
+    margin-top:18px; width:100%; padding:12px; border:none; border-radius:8px;
+    background:var(--primary); color:#fff; font-weight:800; cursor:pointer;
+  }
+
+  main{max-width:760px; margin:0 auto; padding:0 16px;}
+
+  /* ===== هيرو ===== */
+  .hero{text-align:center; padding:34px 10px 22px;}
+  .hero .seal-big{
+    width:78px; height:78px; border-radius:50%; margin:0 auto 14px;
+    background:radial-gradient(circle at 35% 30%, #fff, var(--sky-light) 55%, var(--sky));
+    box-shadow:0 8px 22px rgba(109,75,184,.25);
+  }
+  .hero h1{
+    font-family:'Amiri',serif; font-size:clamp(1.5rem,4.5vw,2.1rem);
+    color:var(--primary-dark); margin-bottom:8px;
+  }
+  .hero p{color:var(--muted); font-size:.92rem; max-width:520px; margin:0 auto; line-height:1.9;}
+  .hero-actions{display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;}
+  .hero-actions button{
+    border:none; padding:11px 22px; border-radius:10px; font-weight:800; cursor:pointer; font-size:.88rem;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .hero-actions .fill{background:var(--primary); color:#fff;}
+  .hero-actions .outline{background:#fff; color:var(--primary); border:1.5px solid var(--primary-light);}
+
+  /* ===== تبويبات ===== */
+  .tabs{display:flex; gap:8px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:6px; margin:18px 0;}
+  .tab{flex:1; text-align:center; padding:12px 8px; border-radius:9px; cursor:pointer; font-weight:800; color:var(--muted); font-size:.9rem;}
+  .tab.active{background:var(--primary); color:#fff;}
+  .panel{display:none;}
+  .panel.active{display:block; animation:rise .3s ease;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px; margin-bottom:20px;}
+  .card h2{font-family:'Amiri',serif; color:var(--primary-dark); font-size:1.15rem; margin-bottom:6px;}
+  .hint{color:var(--muted); font-size:.85rem; margin-bottom:14px; line-height:1.8;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .chip{font-size:.78rem; padding:7px 13px; border-radius:999px; border:1px solid var(--border); background:var(--bg); color:var(--primary-dark); cursor:pointer;}
+
+  textarea{
+    width:100%; min-height:105px; resize:vertical; border:1.5px solid var(--border);
+    border-radius:10px; padding:14px; font-family:inherit; font-size:1rem; background:var(--bg); line-height:1.8;
+  }
+  textarea:focus{outline:none; border-color:var(--primary-light);}
+
+  .row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap;}
+  .radios{display:flex; flex-direction:column; gap:6px; font-size:.85rem; color:var(--ink); margin-top:10px;}
+  .radios label{display:flex; align-items:center; gap:8px; cursor:pointer;}
+  .checkline{display:flex; align-items:center; gap:8px; font-size:.83rem; color:var(--muted); margin-top:8px;}
+
+  button.send{
+    border:none; cursor:pointer; padding:12px 26px; border-radius:10px;
+    font-weight:800; font-size:.92rem; color:#fff; background:var(--primary);
+  }
+  button.send:disabled{opacity:.6; cursor:progress;}
+  .status{font-size:.82rem; color:var(--muted);}
+
+  /* ===== بطاقة النتيجة بأسلوب الموقع المرجعي ===== */
+  .result{display:none; margin-top:20px;}
+  .result.show{display:block; animation:rise .35s ease;}
+  .r-block{border-top:1.5px dashed var(--border); padding:16px 0;}
+  .r-label{display:flex; align-items:center; gap:10px; color:var(--primary-dark); font-weight:800; font-size:.88rem; margin-bottom:10px;}
+  .r-label i{
+    width:30px; height:30px; border-radius:50%; background:var(--primary);
+    color:#fff; display:flex; align-items:center; justify-content:center; font-size:.8rem;
+  }
+  .r-label.ai i{background:var(--sky);}
+  .r-title{font-family:'Amiri',serif; font-size:1.15rem; color:var(--ink); margin-bottom:4px;}
+  .toolbar{display:flex; gap:8px; margin-bottom:10px;}
+  .toolbar button{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px; width:34px; height:34px;
+    cursor:pointer; color:var(--primary-dark); font-size:.85rem;
+  }
+  .toolbar button.active-fav{background:var(--sky); color:#fff; border-color:var(--sky);}
+  .r-date{color:var(--muted); font-size:.78rem; margin-bottom:8px;}
+  .r-text{
+    font-family:'Noto Naskh Arabic', serif; line-height:2.1; font-size:1.08rem; white-space:pre-wrap;
+  }
+  .note-box{
+    background:linear-gradient(135deg, rgba(109,75,184,.07), rgba(63,182,224,.07));
+    border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-top:10px;
+    font-size:.8rem; color:var(--danger); line-height:1.8;
+  }
+
+  .comment-box{margin-top:16px;}
+  .comment-box .r-label{margin-bottom:8px;}
+  .comment-box .row-input{display:flex; gap:8px;}
+  .comment-box input{
+    flex:1; border:1.5px solid var(--border); border-radius:8px; padding:10px 14px;
+    font-family:inherit; font-size:.9rem; background:var(--bg);
+  }
+  .comment-box button{border:none; background:var(--primary); color:#fff; padding:0 18px; border-radius:8px; cursor:pointer; font-weight:800;}
+
+  /* ===== قائمة السابقة ===== */
+  .prev-list{margin-top:8px;}
+  .prev-list summary{cursor:pointer; font-weight:800; color:var(--primary-dark); font-size:.9rem; padding:6px 0;}
+  .prev-item{
+    display:flex; align-items:flex-start; gap:10px; padding:12px 0; border-top:1px solid var(--border); cursor:pointer;
+  }
+  .prev-item .bubble-count{
+    display:flex; align-items:center; gap:5px; color:var(--muted); font-size:.78rem; flex:none; width:40px;
+  }
+  .prev-item .p-body{flex:1;}
+  .prev-item .p-title{font-weight:800; font-size:.88rem; color:var(--primary-dark);}
+  .prev-item .p-meta{font-size:.76rem; color:var(--muted); margin:2px 0;}
+  .prev-item .p-snippet{font-size:.8rem; color:var(--muted);}
+
+  footer{text-align:center; color:var(--muted); font-size:.78rem; padding:26px 0 10px;}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="icon-btn" id="menu-btn"><i class="fa-solid fa-bars"></i></button>
+  <div class="brand"><div class="seal"></div><strong>ابن نسرين للحلم الدسيم</strong></div>
+  <button class="icon-btn" id="profile-btn"><i class="fa-solid fa-user"></i></button>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="drawer" id="drawer">
+  <button class="close-btn" id="drawer-close"><i class="fa-solid fa-xmark"></i></button>
+  <div class="d-brand">
+    <div class="seal"></div>
+    <strong>ابن نسرين للحلم الدسيم</strong>
+  </div>
+  <hr>
+  <div class="d-item" data-goto="fatwa"><i class="fa-solid fa-scale-balanced"></i> الاستفتاء الشرعي</div>
+  <div class="d-item" data-goto="dream"><i class="fa-solid fa-moon"></i> تفسير الأحلام</div>
+  <div class="d-item" id="drawer-profile"><i class="fa-solid fa-id-card"></i> ملفي الشخصي</div>
+  <div class="d-item" id="drawer-about"><i class="fa-solid fa-circle-info"></i> حول الموقع</div>
+  <hr>
+  <div class="d-footer">مساحة شخصية للاستفتاء الشرعي وتفسير الأحلام وفق مذهب أهل البيت عليهم السلام، بمساعدة الذكاء الاصطناعي.</div>
+</div>
+
+<div class="profile-modal" id="profile-modal">
+  <div class="profile-box">
+    <h3>ملفي الشخصي <button class="close-btn" id="profile-close"><i class="fa-solid fa-xmark"></i></button></h3>
+    <label>الاسم</label>
+    <input type="text" id="p-name" placeholder="اسمك">
+    <label>البلد</label>
+    <select id="p-country">
+      <option value="🇮🇶 العراق">🇮🇶 العراق</option>
+      <option value="🇧🇭 البحرين">🇧🇭 البحرين</option>
+      <option value="🇸🇦 السعودية">🇸🇦 السعودية</option>
+      <option value="🇰🇼 الكويت">🇰🇼 الكويت</option>
+      <option value="🇱🇧 لبنان">🇱🇧 لبنان</option>
+      <option value="🇮🇷 إيران">🇮🇷 إيران</option>
+      <option value="🌍 أخرى">🌍 أخرى</option>
+    </select>
+    <div class="checkline"><input type="checkbox" id="p-hide"><label for="p-hide">إخفاء اسمي بالقائمة (عرضه كـ "زائر")</label></div>
+    <button class="save-btn" id="profile-save">حفظ</button>
+  </div>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="seal-big"></div>
+    <h1>ابن نسرين للحلم الدسيم</h1>
+    <p>مساحتك للاستفتاء الشرعي وتفسير الأحلام وفق الأحكام الشيعية، بمساعدة الذكاء الاصطناعي — خذ راحتك بالتفكير قبل ما تشوف الجواب.</p>
+    <div class="hero-actions">
+      <button class="fill" id="cta-fatwa"><i class="fa-solid fa-scale-balanced"></i> استفتِ الآن</button>
+      <button class="outline" id="cta-dream"><i class="fa-solid fa-moon"></i> فسّر حلمك</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="fatwa">الاستفتاء الشرعي</div>
+    <div class="tab" data-tab="dream">تفسير الأحلام</div>
+  </div>
+
+  <!-- ===================== الاستفتاء ===================== -->
+  <section class="panel active" id="panel-fatwa">
+    <div class="card">
+      <h2>باب الاستفتاء</h2>
+      <p class="hint">اختر موضوعاً شائعاً أو اكتب سؤالك، والجواب حصراً وفق الأحكام الشيعية.</p>
+      <div class="chips">
+        <div class="chip" data-fill="fatwa">حكم الجمع بين الصلاتين</div>
+        <div class="chip" data-fill="fatwa">أحكام الصوم والإفطار</div>
+        <div class="chip" data-fill="fatwa">أحكام الخمس والزكاة</div>
+      </div>
+      <textarea id="fatwa-input" placeholder="مثال: ما حكم الجمع بين الصلاتين للمسافر؟"></textarea>
+      <div class="radios">
+        <label><input type="radio" name="fatwa-vis" value="public" checked> سؤال عام، احفظه بسجلّي</label>
+        <label><input type="radio" name="fatwa-vis" value="private"> سؤال خاص، لا تحفظه بالسجلّ</label>
+      </div>
+      <div class="row">
+        <button class="send" id="fatwa-btn"><i class="fa-solid fa-paper-plane"></i> إرسال السؤال</button>
+        <span class="status" id="fatwa-status"></span>
+      </div>
+
+      <div class="result" id="fatwa-result">
+        <div class="r-block">
+          <div class="r-label"><i class="fa-solid fa-file-lines"></i> العنوان</div>
+          <div class="r-title" id="fatwa-title"></div>
+          <div class="toolbar">
+            <button class="fsize" data-k="fatwa" data-d="-1"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+            <button class="fsize" data-k="fatwa" data-d="1"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button class="share-btn" data-k="fatwa"><i class="fa-solid fa-share-nodes"></i></button>
+            <button class="fav-btn" data-k="fatwa"><i class="fa-regular fa-bookmark"></i></button>
+          </div>
+        </div>
+        <div class="r-block">
+          <div class="r-label"><i class="fa-solid fa-circle-question"></i> السؤال</div>
+          <div class="r-date" id="fatwa-date"></div>
+          <div class="r-text" id="fatwa-q-text"></div>
+        </div>
+        <div class="r-block">
+          <div class="r-label ai"><i class="fa-solid fa-robot"></i> الإجابة (مساعد ذكاء اصطناعي)</div>
+          <div class="r-text" id="fatwa-a-text"></div>
+          <div class="note-box">هذا جواب من مساعد ذكاء اصطناعي غير تابع لأي مرجعية رسمية، وما يغني عن مراجعة مكتب مرجعك بالمسائل الدقيقة أو المصيرية.</div>
+        </div>
+        <div class="comment-box">
+          <div class="r-label"><i class="fa-solid fa-comment-dots"></i> إدراج تعقيب أو سؤال متابعة</div>
+          <div class="row-input">
+            <input type="text" id="fatwa-followup" placeholder="اسأل أكثر لتوضّح فكرتك…">
+            <button id="fatwa-followup-btn"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <details class="prev-list" id="fatwa-history-wrap">
+        <summary>الاستفتاءات السابقة</summary>
+        <div id="fatwa-history"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== الأحلام ===================== -->
+  <section class="panel" id="panel-dream">
+    <div class="card">
+      <h2>باب تفسير الأحلام</h2>
+      <p class="hint">احچي حلمك بالتفصيل قد ما تتذكر.</p>
+      <div class="chips">
+        <div class="chip" data-fill="dream">حلمت اني اطير بالسماء</div>
+        <div class="chip" data-fill="dream">حلمت بشخص متوفى يحچيني</div>
+        <div class="chip" data-fill="dream">حلمت اني ازور مرقد مقدس</div>
+      </div>
+      <textarea id="dream-input" placeholder="مثال: حلمت اني اطير فوگ بيت جدي وبيدي وردة بيضاء..."></textarea>
+      <div class="radios">
+        <label><input type="radio" name="dream-vis" value="public" checked> احفظ الحلم بسجلّي</label>
+        <label><input type="radio" name="dream-vis" value="private"> لا تحفظه بالسجلّ</label>
+      </div>
+      <div class="row">
+        <button class="send" id="dream-btn"><i class="fa-solid fa-paper-plane"></i> فسّر لي الحلم</button>
+        <span class="status" id="dream-status"></span>
+      </div>
+
+      <div class="result" id="dream-result">
+        <div class="r-block">
+          <div class="r-label"><i class="fa-solid fa-file-lines"></i> العنوان</div>
+          <div class="r-title" id="dream-title"></div>
+          <div class="toolbar">
+            <button class="fsize" data-k="dream" data-d="-1"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+            <button class="fsize" data-k="dream" data-d="1"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button class="share-btn" data-k="dream"><i class="fa-solid fa-share-nodes"></i></button>
+            <button class="fav-btn" data-k="dream"><i class="fa-regular fa-bookmark"></i></button>
+          </div>
+        </div>
+        <div class="r-block">
+          <div class="r-label"><i class="fa-solid fa-cloud-moon"></i> الحلم</div>
+          <div class="r-date" id="dream-date"></div>
+          <div class="r-text" id="dream-q-text"></div>
+        </div>
+        <div class="r-block">
+          <div class="r-label ai"><i class="fa-solid fa-robot"></i> التفسير (مساعد ذكاء اصطناعي)</div>
+          <div class="r-text" id="dream-a-text"></div>
+          <div class="note-box">التفسير اجتهادي وليس قطعياً، والرؤيا تختلف باختلاف حال الرائي.</div>
+        </div>
+        <div class="comment-box">
+          <div class="r-label"><i class="fa-solid fa-comment-dots"></i> زد تفصيل عن الحلم</div>
+          <div class="row-input">
+            <input type="text" id="dream-followup" placeholder="زيد تفصيل ينفع بالتفسير…">
+            <button id="dream-followup-btn"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <details class="prev-list" id="dream-history-wrap">
+        <summary>الأحلام السابقة</summary>
+        <div id="dream-history"></div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>ابن نسرين للحلم الدسيم</footer>
+
+<script>
+  // ---------- الدرج الجانبي ----------
+  const drawer = document.getElementById('drawer');
+  const overlay = document.getElementById('overlay');
+  function openDrawer(){ drawer.classList.add('show'); overlay.classList.add('show'); }
+  function closeDrawer(){ drawer.classList.remove('show'); overlay.classList.remove('show'); }
+  document.getElementById('menu-btn').addEventListener('click', openDrawer);
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', ()=>{ closeDrawer(); closeProfile(); });
+  document.querySelectorAll('.d-item[data-goto]').forEach(item=>{
+    item.addEventListener('click', ()=>{ selectTab(item.dataset.goto); closeDrawer(); });
+  });
+  document.getElementById('drawer-about').addEventListener('click', ()=>{
+    alert('ابن نسرين للحلم الدسيم: مساحة شخصية للاستفتاء الشرعي وتفسير الأحلام وفق مذهب أهل البيت عليهم السلام، بمساعدة الذكاء الاصطناعي. الأجوبة اجتهادية وليست بديلاً عن مرجعك الديني.');
+  });
+
+  // ---------- الملف الشخصي ----------
+  const profileModal = document.getElementById('profile-modal');
+  function openProfile(){ profileModal.classList.add('show'); loadProfileForm(); }
+  function closeProfile(){ profileModal.classList.remove('show'); }
+  document.getElementById('profile-btn').addEventListener('click', openProfile);
+  document.getElementById('drawer-profile').addEventListener('click', ()=>{ closeDrawer(); openProfile(); });
+  document.getElementById('profile-close').addEventListener('click', closeProfile);
+
+  function loadProfileForm(){
+    const p = JSON.parse(localStorage.getItem('ibn-nesreen-profile') || '{}');
+    document.getElementById('p-name').value = p.name || '';
+    document.getElementById('p-country').value = p.country || '🇮🇶 العراق';
+    document.getElementById('p-hide').checked = !!p.hide;
+  }
+  document.getElementById('profile-save').addEventListener('click', ()=>{
+    const p = {
+      name: document.getElementById('p-name').value.trim(),
+      country: document.getElementById('p-country').value,
+      hide: document.getElementById('p-hide').checked
+    };
+    localStorage.setItem('ibn-nesreen-profile', JSON.stringify(p));
+    closeProfile();
+  });
+  function getProfile(){ return JSON.parse(localStorage.getItem('ibn-nesreen-profile') || '{}'); }
+
+  // ---------- التبويبات ----------
+  function selectTab(kind){
+    document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab===kind));
+    document.querySelectorAll('.panel').forEach(p=> p.classList.toggle('active', p.id==='panel-'+kind));
+    document.getElementById('panel-'+kind).scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  document.querySelectorAll('.tab').forEach(tab=> tab.addEventListener('click', ()=> selectTab(tab.dataset.tab)));
+  document.getElementById('cta-fatwa').addEventListener('click', ()=> selectTab('fatwa'));
+  document.getElementById('cta-dream').addEventListener('click', ()=> selectTab('dream'));
+
+  // ---------- تعبئة سريعة ----------
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const kind = chip.dataset.fill;
+      document.getElementById(kind+'-input').value = chip.textContent.trim();
+    });
+  });
+
+  // ---------- AI عبر Puter.js (مجاني بدون مفتاح API) ----------
+  async function askAI(messages){
+    const response = await puter.ai.chat(messages);
+    if (typeof response === 'string') return response;
+    if (response?.message?.content) return response.message.content;
+    if (Array.isArray(response?.content)) return response.content.map(c=>c.text||'').join('\n');
+    return JSON.stringify(response);
+  }
+
+  const FATWA_PROMPT = `أنت مساعد يجيب حصراً وفق الأحكام الفقهية الشيعية الإمامية الاثني عشرية (مثل فتاوى المراجع كالسيد السيستاني أو نظائره)، ولا تذكر آراء مذاهب أخرى إلا للمقارنة إذا طُلب ذلك صراحة.
+اجعل الجواب:
+- واضح ومباشر بالعربية العراقية المفهومة.
+- يبدأ بالحكم (واجب / حرام / مستحب / مكروه / مباح / فيه تفصيل).
+- يذكر بإيجاز الدليل أو المبنى الفقهي العام إذا كان معروفاً بشكل مبسط.
+- إذا كانت المسألة دقيقة أو مصيرية نبّه باختصار أنها تحتاج مراجعة مباشرة.
+لا تدّعي اليقين المطلق، ووضّح إذا كانت المسألة فيها خلاف بين المراجع.`;
+
+  const DREAM_PROMPT = `أنت مفسر أحلام يعتمد على كتب تعبير الرؤيا المعروفة عند علماء الشيعة (كابن سيرين والنابلسي كمرجع عام تراثي)، مع مراعاة الطابع الإسلامي الشيعي بالرموز الدينية.
+اجعل التفسير بالعربية العراقية الواضحة، ويذكر المعاني المحتملة للرموز الأساسية، ويفرّق بين الرؤيا الصادقة والحلم النفسي العادي إن أمكن.`;
+
+  function shortTitle(text){
+    const words = text.trim().split(/\s+/).slice(0,7).join(' ');
+    return words + (text.trim().split(/\s+/).length>7 ? '…' : '');
+  }
+  function escapeHtml(s){ return s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function hijriDate(){
+    try{ return new Date().toLocaleDateString('ar-SA-u-ca-islamic', {day:'numeric', month:'long', year:'numeric'}); }
+    catch(e){ return new Date().toLocaleDateString('ar-EG'); }
+  }
+
+  function setup(kind, systemPrompt, storageKey, radioName){
+    const input = document.getElementById(kind+'-input');
+    const btn = document.getElementById(kind+'-btn');
+    const status = document.getElementById(kind+'-status');
+    const resultBox = document.getElementById(kind+'-result');
+    const titleEl = document.getElementById(kind+'-title');
+    const dateEl = document.getElementById(kind+'-date');
+    const qText = document.getElementById(kind+'-q-text');
+    const aText = document.getElementById(kind+'-a-text');
+    const followupInput = document.getElementById(kind+'-followup');
+    const followupBtn = document.getElementById(kind+'-followup-btn');
+    const historyEl = document.getElementById(kind+'-history');
+
+    let conversation = [{role:'system', content: systemPrompt}];
+    let fontStep = 0;
+    let favored = false;
+
+    function loadHistory(){
+      const list = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      historyEl.innerHTML = '';
+      list.slice().reverse().forEach(item=>{
+        const div = document.createElement('div');
+        div.className = 'prev-item';
+        div.innerHTML = `
+          <div class="bubble-count"><i class="fa-regular fa-comment"></i> ${item.count||0}</div>
+          <div class="p-body">
+            <div class="p-title">${escapeHtml(item.title)}</div>
+            <div class="p-meta">${escapeHtml(item.who)} · ${escapeHtml(item.date)}</div>
+            <div class="p-snippet">${escapeHtml(item.a).slice(0,80)}…</div>
+          </div>`;
+        div.addEventListener('click', ()=>{ input.value = item.q; window.scrollTo({top: input.getBoundingClientRect().top + window.scrollY - 100, behavior:'smooth'}); });
+        historyEl.appendChild(div);
+      });
+    }
+    function saveHistory(q,a,title){
+      const p = getProfile();
+      const who = p.hide ? 'زائر' : (p.name || 'أنت') + (p.country ? ' · '+p.country : '');
+      const list = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      list.push({q,a,title,who,date:hijriDate(),count:0});
+      localStorage.setItem(storageKey, JSON.stringify(list.slice(-30)));
+      loadHistory();
+    }
+    loadHistory();
+
+    async function send(text, isFollowup){
+      if(!text){ status.textContent='اكتب سؤالك أو حلمك أول.'; status.style.color='var(--danger)'; return; }
+      (isFollowup?followupBtn:btn).disabled = true;
+      status.style.color=''; status.textContent='جاري التفكير…';
+      conversation.push({role:'user', content:text});
+
+      try{
+        const result = await askAI(conversation);
+        conversation.push({role:'assistant', content:result});
+        if(!isFollowup){
+          titleEl.textContent = shortTitle(text);
+          dateEl.textContent = hijriDate();
+          qText.textContent = text;
+          aText.textContent = result;
+          resultBox.classList.add('show');
+          const isPublic = document.querySelector(`input[name="${radioName}"]:checked`).value === 'public';
+          if(isPublic) saveHistory(text, result, shortTitle(text));
+        } else {
+          aText.textContent = aText.textContent + '\n\n— ' + text + '\n' + result;
+        }
+        status.textContent = 'تم ✓';
+      }catch(err){
+        console.error(err);
+        status.textContent = 'صار خطأ بالاتصال، جرب مرة ثانية.';
+        status.style.color = 'var(--danger)';
+        conversation.pop();
+      }finally{
+        (isFollowup?followupBtn:btn).disabled = false;
+      }
+    }
+
+    btn.addEventListener('click', ()=>{ send(input.value.trim(), false); });
+    followupBtn.addEventListener('click', ()=>{ const t=followupInput.value.trim(); if(t){ send(t,true); followupInput.value=''; } });
+    followupInput.addEventListener('keydown', e=>{ if(e.key==='Enter') followupBtn.click(); });
+
+    // أدوات الشريط (حجم الخط / مشاركة / حفظ)
+    document.querySelectorAll(`.fsize[data-k="${kind}"]`).forEach(b=>{
+      b.addEventListener('click', ()=>{
+        fontStep += parseInt(b.dataset.d);
+        fontStep = Math.max(-2, Math.min(4, fontStep));
+        const size = 1.08 + fontStep*0.12;
+        qText.style.fontSize = size+'rem';
+        aText.style.fontSize = size+'rem';
+      });
+    });
+    document.querySelector(`.share-btn[data-k="${kind}"]`).addEventListener('click', ()=>{
+      const shareText = titleEl.textContent + '\n\n' + aText.textContent;
+      if(navigator.share) navigator.share({title:'ابن نسرين للحلم الدسيم', text:shareText});
+      else navigator.clipboard.writeText(shareText);
+    });
+    document.querySelector(`.fav-btn[data-k="${kind}"]`).addEventListener('click', function(){
+      favored = !favored;
+      this.classList.toggle('active-fav', favored);
+      this.innerHTML = favored ? '<i class="fa-solid fa-bookmark"></i>' : '<i class="fa-regular fa-bookmark"></i>';
+    });
+  }
+
+  setup('fatwa', FATWA_PROMPT, 'ibn-nesreen-fatwa-history', 'fatwa-vis');
+  setup('dream', DREAM_PROMPT, 'ibn-nesreen-dream-history', 'dream-vis');
+</script>
+
+</body>
+</html>
